@@ -1,4 +1,7 @@
 import mysql.connector as mysql
+from bank import table_accounts
+
+print(table_accounts)
 
 mydb = mysql.connect(
     host= "localhost",
@@ -8,7 +11,4 @@ mydb = mysql.connect(
 )    
 
 mycursor = mydb.cursor()
-mycursor.execute("SHOW COLUMNS FROM accounts")
-result = mycursor.fetchall()
-for i in result:
-    print(i)
+

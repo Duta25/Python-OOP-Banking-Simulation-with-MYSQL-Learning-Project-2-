@@ -23,17 +23,19 @@ class Bank:
     def create_account(self, name: str, pin: str, first_deposit: int):
         #access data and compare status
         table_accounts = mycursor.execute("SELECT * FROM accounts")
-        sql = "SELECT * FROM accounts WHERE name = '%s'"
-        val = name
+        sql = "SELECT * FROM accounts WHERE name = %s"
+        val = (name,)
+        print(type(val))
         account = mycursor.execute(sql, val)
 
         #validating account status
-        if account in table_accounts:
-            print("this account is already exist!")
-            return
-        
+        for i in table_accounts:
+            if account == i:
+                print("this account is already exist!")
+                return
+            
         # validating first deposit from user
-        if first_deposit <= self.first_depo:
+        if first_deposit < self.first_depo:
             print(f"min deposit = {self.first_depo}")
             return
 
@@ -43,8 +45,8 @@ class Bank:
         account.balance = first_deposit
 
         # insert data account into database
-        sql = "INSERT INTO accounts (pin, balance) VALUES (%s, %i)"
-        val = (pin, first_deposit)
+        sql = "INSERT INTO accounts (name, pin, balance) VALUES (%s, %s, %i)"
+        val = (name, pin, first_deposit)
         mycursor.execute(sql, val)
         print("Create account success!")
 
