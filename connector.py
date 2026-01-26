@@ -8,7 +8,7 @@ mydb = mysql.connect(
 )    
 
 mycursor = mydb.cursor()
-mycursor.execute("SELECT * FROM accounts")
+mycursor.execute("SHOW COLUMNS FROM accounts")
 result = mycursor.fetchall()
 for i in result:
     print(i)
