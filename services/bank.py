@@ -7,13 +7,13 @@ class Bank:
         self.min_depo = 50000  # minimum deposit next moment
 
     def create_account(self, name: str, pin: str, balance: int, email: str):
-        #access data and compare status
+        # access data and compare status
         sql = "SELECT * FROM accounts WHERE email = %s"
         val = (email,)
         mycursor.execute(sql, val)
         account = mycursor.fetchone()
 
-        #validating account status
+        # validating account status
         if account:
             raise ValueError("Account with this email is already exist!")
         
@@ -34,11 +34,40 @@ class Bank:
 
         return account
         
-    def withdraw(self):
-        pass
+    def withdraw(self, amount, email):
+        # check balance from database
+        balance = "SELECT balance FROM accounts WHERE email = %s"
+        val = (email,)
+        mycursor.execute(balance, val)
+        result = mycursor.fetchone()
+        
+        # validate if email not found
+        if result is None:
+            raise ValueError("Email Not Found!")
 
-    def check_balance(self):
-        pass
+        # validate if balance not enough
+        if result[0] < amount:
+            raise ValueError("Balance not enough!")
+
+        # update balance value from database
+        sql = "UPDATE accounts SET balance = balance - %s WHERE email = %s"
+        val = (amount, email)
+        mycursor.execute(sql, val)
+        mydb.commit()
+
+    def check_balance(self, email):
+        # check account in database
+        sql = "SELECT balance FROM accounts WHERE email = %s"
+        val = (email,)
+        mycursor.execute(sql, val)
+        result = mycursor.fetchone()
+
+        # validate if email not found
+        if result is None:
+            raise ValueError("Email not found!")
+
+        return result
+
 
     def transfer(self):
         pass
