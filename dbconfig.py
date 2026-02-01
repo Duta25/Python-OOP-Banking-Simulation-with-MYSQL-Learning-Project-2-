@@ -9,4 +9,7 @@ mydb = mysql.connect(
 
 mycursor = mydb.cursor()
 
-mycursor.execute("DROP TABLE users")
+mycursor.execute("SELECT * FROM accounts")
+result = mycursor.fetchall()
+for i in result:
+    print(i)
